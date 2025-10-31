@@ -1,2 +1,2 @@
 # setup-guides
-Findings &amp; useful utils guidebook in markdown format
+Useful utils guidebook in markdown format
