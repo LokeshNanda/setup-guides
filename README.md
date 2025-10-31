@@ -7,9 +7,6 @@ This will update the readme with the latest content.
 
 ## Contents
 
-- **New File**
-  - [He](./docs/NEW-FILE/test1.md)
-
 - **Utils**
   - [Github SSH for Multiple Client or Personal Projects ](./docs/UTILS/github-multi-project-ssh-setup.md)
 
