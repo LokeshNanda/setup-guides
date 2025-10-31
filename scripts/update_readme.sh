@@ -83,8 +83,9 @@ cleanup() {
 trap cleanup EXIT
 
 {
-  printf '# setup-guides\n'
-  printf 'Useful utils guidebook in markdown format.\n\n'
+  printf '# Setup Guides\n'
+  printf 'Useful guidebook in markdown format.\n\n'
+  printf '[Website Link](https://lokeshnanda.github.io/setup-guides/)\n\n'
   printf '# Pre-Requisite\n'
   printf 'Update the markdown files and run the shell script `sh scripts/update_readme.sh` \nThis will update the readme with the latest content.\n\n'
   printf '## Contents\n\n'

@@ -1,5 +1,7 @@
-# setup-guides
-Useful utils guidebook in markdown format.
+# Setup Guides
+Useful guidebook in markdown format.
+
+[Website Link](https://lokeshnanda.github.io/setup-guides/)
 
 # Pre-Requisite
 Update the markdown files and run the shell script `sh scripts/update_readme.sh` 
