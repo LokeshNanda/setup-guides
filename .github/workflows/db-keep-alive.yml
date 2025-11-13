@@ -1,0 +1,34 @@
+name: Daily Aiven DB Ping
+
+on:
+  workflow_dispatch: # Allows you to run this manually from the "Actions" tab
+  schedule:
+    # Runs "at 30 minutes past the 5th hour (UTC)" every day.
+    # 5:30 AM UTC
+    - cron: '30 5 * * *'
+
+jobs:
+  ping-db:
+    name: Ping Aiven PostgreSQL DB
+    runs-on: ubuntu-latest # Use a standard, free runner
+
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+        shell: bash
+
+      - name: Run psql SELECT command
+        env:
+          # This is the crucial part. This env variable is used by psql
+          # to authenticate, so you don't have to put the password in the command.
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          # Run the psql command.
+          # It connects using your secrets and runs the simplest possible query: "SELECT now();"
+          # Aiven requires SSL, so we add "sslmode=require".
+          psql "postgresql://${{ secrets.POSTGRES_USER }}@${{ secrets.POSTGRES_HOST }}:${{ secrets.POSTGRES_PORT }}/${{ secrets.POSTGRES_DB }}?sslmode=require" -c "SELECT now();"
+          
+          echo "Successfully pinged the database."
+        shell: bash
