@@ -1,14 +1,18 @@
-name: Daily Aiven DB Ping
+# This is a GitHub Actions workflow file.
+# It will automatically run on the schedule you define below.
+# This workflow now contains two parallel jobs: one for PostgreSQL and one for MySQL.
+
+name: Daily DB Ping
 
 on:
   workflow_dispatch: # Allows you to run this manually from the "Actions" tab
   schedule:
     # Runs "at 30 minutes past the 5th hour (UTC)" every day.
-    # 5:30 AM UTC
+    # You can change this using a cron calculator (like crontab.guru)
     - cron: '30 5 * * *'
 
 jobs:
-  ping-db:
+  ping-postgres-db:
     name: Ping Aiven PostgreSQL DB
     runs-on: ubuntu-latest # Use a standard, free runner
 
@@ -30,5 +34,29 @@ jobs:
           # Aiven requires SSL, so we add "sslmode=require".
           psql "postgresql://${{ secrets.POSTGRES_USER }}@${{ secrets.POSTGRES_HOST }}:${{ secrets.POSTGRES_PORT }}/${{ secrets.POSTGRES_DB }}?sslmode=require" -c "SELECT now();"
           
-          echo "Successfully pinged the database."
+          echo "Successfully pinged the PostgreSQL database."
+        shell: bash
+
+  ping-mysql-db:
+    name: Ping Aiven MySQL DB
+    runs-on: ubuntu-latest # Use a standard, free runner
+
+    steps:
+      - name: Install MySQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+        shell: bash
+
+      - name: Run mysql SELECT command
+        env:
+          # For MySQL, the password environment variable is MYSQL_PWD
+          MYSQL_PWD: ${{ secrets.MYSQL_PASSWORD }}
+        run: |
+          # Run the mysql command.
+          # We use --ssl-mode=REQUIRED for Aiven's requirement.
+          # The query is "-e 'SELECT now();'"
+          mysql -h ${{ secrets.MYSQL_HOST }} -u ${{ secrets.MYSQL_USER }} -P ${{ secrets.MYSQL_PORT }} -D ${{ secrets.MYSQL_DB }} --ssl-mode=REQUIRED -e "SELECT now();"
+          
+          echo "Successfully pinged the MySQL database."
         shell: bash
